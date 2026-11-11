@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mahi Metrics | Find the money leaking out of your business</title>
+<meta name="description" content="Mahi Metrics connects to your Xero (read-only) and checks every month for double payments, price rises, forgotten subscriptions and bookkeeping mistakes, explained in plain English. Based in Hamilton, NZ.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #0F3D3E; --teal: #17756F; --mint: #E6F2F0; --mint2: #F5FAF9; --ink: #12262A; --grey: #55686A;
+    --line: #DCEAE7; --red: #B42318; --redsoft: #FDECEA; --amber: #B54708; --ambersoft: #FEF4E6; --blue: #1D5C9C; --bluesoft: #EAF2FB;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: "Source Sans 3", -apple-system, "Segoe UI", Arial, sans-serif; color: var(--ink); background: #fff;
+         font-size: 18px; line-height: 1.55; }
+  a { color: var(--teal); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 22px; }
+  h1, h2, h3 { color: var(--green); line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 12px; }
+  h1 { font-size: clamp(36px, 5vw, 56px); font-weight: 800; }
+  h2 { font-size: clamp(28px, 3.4vw, 38px); font-weight: 800; }
+  h3 { font-size: 20px; font-weight: 700; }
+  p { margin: 0 0 14px; }
+  .kicker { font-size: 13px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--teal); font-weight: 700; margin-bottom: 8px; }
+  .lead { font-size: 21px; color: var(--grey); max-width: 640px; }
+  .btn { display: inline-block; padding: 14px 24px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 17px;
+         transition: transform .12s ease, box-shadow .12s ease; }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(15,61,62,.15); }
+  .btn.primary { background: var(--teal); color: #fff; }
+  .btn.ghost { background: #fff; color: var(--green); border: 1.5px solid var(--line); }
+  section { padding: 84px 0; }
+  section.alt { background: var(--mint2); }
+
+  /* header */
+  header { position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 18px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--green); font-weight: 800; letter-spacing: .6px; font-size: 18px; }
+  .logo .mark { width: 34px; height: 34px; border-radius: 9px; background: var(--green); display: grid; place-items: center; }
+  nav { display: flex; gap: 26px; align-items: center; }
+  nav a { text-decoration: none; color: var(--ink); font-weight: 600; font-size: 16px; }
+  nav a.btn { color: #fff; padding: 10px 18px; font-size: 15px; }
+  @media (max-width: 860px) { nav a:not(.btn) { display: none; } }
+
+  /* hero */
+  .hero { padding: 72px 0 84px; background: linear-gradient(180deg, var(--mint2), #fff); }
+  .hero .grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 54px; align-items: center; }
+  .hero .actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 26px 0 18px; }
+  .hero .small { color: var(--grey); font-size: 15px; }
+  @media (max-width: 900px) { .hero .grid { grid-template-columns: 1fr; } }
+
+  /* mock report */
+  .report { background: #fff; border-radius: 16px; box-shadow: 0 18px 50px rgba(15,61,62,.14); overflow: hidden; border: 1px solid var(--line); }
+  .report .bar { background: var(--green); color: #fff; padding: 12px 18px; display: flex; justify-content: space-between; font-size: 13px; }
+  .report .bar b { letter-spacing: .8px; }
+  .report .bar span { color: #BEDED9; }
+  .report .body { padding: 18px; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+  .stat { background: var(--mint); border-left: 4px solid var(--teal); border-radius: 8px; padding: 10px 12px; }
+  .stat .v { font-size: 22px; font-weight: 800; color: var(--green); line-height: 1.1; }
+  .stat .l { font-size: 12px; color: var(--grey); }
+  .stat.red { border-left-color: var(--red); } .stat.amber { border-left-color: var(--amber); }
+  .finding { display: flex; justify-content: space-between; gap: 12px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-top: 8px;
+             border-left-width: 4px; }
+  .finding.red { border-left-color: var(--red); } .finding.amber { border-left-color: var(--amber); } .finding.blue { border-left-color: var(--blue); }
+  .tag { display: inline-block; font-size: 10.5px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; }
+  .tag.red { background: var(--redsoft); color: var(--red); } .tag.amber { background: var(--ambersoft); color: var(--amber); }
+  .tag.blue { background: var(--bluesoft); color: var(--blue); }
+  .finding .t { font-weight: 700; font-size: 15px; margin-top: 2px; }
+  .finding .d { font-size: 13px; color: var(--grey); }
+  .finding .amt { font-weight: 800; color: var(--green); white-space: nowrap; }
+  .report .note { font-size: 11.5px; color: var(--grey); margin-top: 10px; }
+
+  /* trust strip */
+  .trust { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; padding: 26px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .trust div { display: flex; gap: 10px; align-items: flex-start; font-size: 16px; font-weight: 600; color: var(--green); }
+  .trust svg { flex: none; margin-top: 3px; }
+  @media (max-width: 860px) { .trust { grid-template-columns: 1fr 1fr; } }
+
+  /* cards */
+  .cards { display: grid; gap: 20px; }
+  .cards.c3 { grid-template-columns: repeat(3, 1fr); } .cards.c4 { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 980px) { .cards.c4 { grid-template-columns: 1fr 1fr; } .cards.c3 { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) { .cards.c4 { grid-template-columns: 1fr; } }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 24px; }
+  .card ul { margin: 8px 0 0; padding-left: 20px; color: var(--ink); }
+  .card li { margin-bottom: 6px; font-size: 16.5px; }
+  .card .icon { width: 44px; height: 44px; border-radius: 11px; background: var(--mint); display: grid; place-items: center; margin-bottom: 14px; }
+  .step .num { width: 38px; height: 38px; border-radius: 50%; background: var(--teal); color: #fff; font-weight: 800; display: grid; place-items: center; margin-bottom: 14px; }
+
+  /* sample */
+  .sample { display: grid; grid-template-columns: .9fr 1.1fr; gap: 50px; align-items: center; }
+  .sample img { width: 100%; border-radius: 12px; border: 1px solid var(--line); box-shadow: 0 14px 40px rgba(15,61,62,.12); }
+  @media (max-width: 900px) { .sample { grid-template-columns: 1fr; } }
+
+  /* pricing */
+  .price { display: flex; flex-direction: column; }
+  .price .amount { font-size: 38px; font-weight: 800; color: var(--green); line-height: 1.1; margin: 6px 0 2px; }
+  .price .per { color: var(--grey); font-size: 15px; margin-bottom: 14px; }
+  .price ul { flex: 1; }
+  .price.featured { border: 2px solid var(--teal); position: relative; }
+  .price .badge { position: absolute; top: -13px; left: 22px; background: var(--teal); color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .6px;
+                  padding: 4px 10px; border-radius: 99px; text-transform: uppercase; }
+  .price .btn { margin-top: 18px; text-align: center; }
+  .guarantee { margin-top: 26px; background: var(--mint); border-radius: 14px; padding: 20px 24px; display: flex; gap: 14px; align-items: center; }
+
+  /* faq */
+  details { border-bottom: 1px solid var(--line); padding: 16px 0; }
+  summary { cursor: pointer; font-weight: 700; color: var(--green); font-size: 18px; list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; float: right; color: var(--teal); font-size: 22px; line-height: 1; }
+  details[open] summary::after { content: "–"; }
+  details p { margin: 10px 0 0; color: var(--grey); }
+
+  /* cta + footer */
+  .cta { background: var(--green); color: #fff; border-radius: 20px; padding: 48px; text-align: center; }
+  .cta h2 { color: #fff; } .cta p { color: #BEDED9; font-size: 19px; }
+  .cta .btn.primary { background: #fff; color: var(--green); }
+  footer { padding: 34px 0 44px; color: var(--grey); font-size: 15px; }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  footer a { color: var(--grey); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  @media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Mahi Metrics home">
+      <span class="mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg></span>
+      MAHI METRICS
+    </a>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#checks">What we check</a>
+      <a href="#who">Who it's for</a>
+      <a href="#pricing">Pricing</a>
+      <a class="btn primary" href="#contact">Free health check</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap grid">
+    <div>
+      <div class="kicker">Monthly money checks for NZ organisations</div>
+      <h1>Find the money leaking out of your business.</h1>
+      <p class="lead">Mahi Metrics connects to your Xero, read-only, and checks every month for double payments, price rises,
+        forgotten subscriptions and bookkeeping mistakes. You get a short, plain-English report, checked by a person.</p>
+      <div class="actions">
+        <a class="btn primary" href="#contact">Get a free health check</a>
+        <a class="btn ghost" href="sample-report.pdf" target="_blank" rel="noopener">See a sample report</a>
+      </div>
+      <p class="small">Free first check. No changes to your Xero. Based in Hamilton, Waikato.</p>
+    </div>
+
+    <div class="report" aria-label="Example of a Mahi Metrics report (made-up figures)">
+      <div class="bar"><b>MAHI METRICS</b><span>Spending check · September</span></div>
+      <div class="body">
+        <div class="stats">
+          <div class="stat red"><div class="v">$3,850</div><div class="l">possible duplicate to recover</div></div>
+          <div class="stat amber"><div class="v">$2,268</div><div class="l">a year in price rises &amp; new charges</div></div>
+          <div class="stat"><div class="v">5</div><div class="l">items to check</div></div>
+        </div>
+        <div class="finding red"><div><span class="tag red">Possible duplicate</span><div class="t">CleanRight Services</div>
+          <div class="d">Paid 20 Sep and again 23 Sep. Ask for a credit if paid twice.</div></div><div class="amt">$3,850</div></div>
+        <div class="finding amber"><div><span class="tag amber">Price rise</span><div class="t">FastNet Broadband</div>
+          <div class="d">Now $520 a month, was $420. Check the contract or get a quote.</div></div><div class="amt">$1,200/yr</div></div>
+        <div class="finding amber"><div><span class="tag amber">GST</span><div class="t">Kiwi Bank</div>
+          <div class="d">GST claimed on bank fees, which usually have none.</div></div><div class="amt">$25</div></div>
+        <div class="note">Example with made-up figures.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="trust">
+    <div><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#17756F" stroke-width="2.4"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Read-only access to Xero</div>
+    <div><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#17756F" stroke-width="2.4"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Every report checked by a person</div>
+    <div><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#17756F" stroke-width="2.4"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg>Personal details removed automatically</div>
+    <div><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#17756F" stroke-width="2.4"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Local to the Waikato, NZ</div>
+  </div>
+</div>
+
+<section id="how">
+  <div class="wrap">
+    <div class="kicker">How it works</div>
+    <h2>Two minutes to set up. Then a report every month.</h2>
+    <div class="cards c3" style="margin-top:30px">
+      <div class="card step"><div class="num">1</div><h3>Add us to your Xero</h3>
+        <p>Invite Mahi Metrics as a <b>read-only</b> user in Xero. It takes about two minutes, and you can remove us any time.</p></div>
+      <div class="card step"><div class="num">2</div><h3>We check every month</h3>
+        <p>Our software reads your bills and payments and runs more than 25 checks. Then a person reviews every finding.</p></div>
+      <div class="card step"><div class="num">3</div><h3>You get a clear report</h3>
+        <p>A short PDF: what we found, what it's costing you, and what to do about it. You decide what to act on.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="checks" class="alt">
+  <div class="wrap">
+    <div class="kicker">What we check</div>
+    <h2>The things that quietly cost you money.</h2>
+    <p class="lead">Xero shows you the numbers. We look at the patterns over months and tell you what needs attention.</p>
+    <div class="cards c4" style="margin-top:30px">
+      <div class="card"><div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B42318" stroke-width="2.4"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <h3>Money leaking out</h3>
+        <ul><li>Bills paid twice</li><li>Suppliers raising prices</li><li>New subscriptions nobody approved</li><li>Large or unusual payments</li><li>Big first payments to new suppliers</li></ul></div>
+      <div class="card"><div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B54708" stroke-width="2.4"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></div>
+        <h3>Bookkeeping problems</h3>
+        <ul><li>GST mistakes</li><li>Payments coded to the wrong account</li><li>Personal spending in the business account</li><li>Split payments and duplicate suppliers</li><li>Items left uncoded or unreconciled</li></ul></div>
+      <div class="card"><div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#17756F" stroke-width="2.4"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg></div>
+        <h3>The bigger picture</h3>
+        <ul><li>Every regular charge in one list</li><li>Yearly bills coming up</li><li>Budget vs actual, with a year-end projection</li><li>Your biggest suppliers</li></ul></div>
+      <div class="card"><div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D5C9C" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>Money owed</h3>
+        <ul><li>Overdue invoices, tracked month to month</li><li>Reminder emails ready to send</li><li>Gentle reminders for donations</li><li>Overdue bills, most urgent first</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="who">
+  <div class="wrap">
+    <div class="kicker">Who it's for</div>
+    <h2>Built for three kinds of customers.</h2>
+    <div class="cards c3" style="margin-top:30px">
+      <div class="card"><h3>Small businesses</h3>
+        <p>You're busy running the business, not reading Xero reports. We tell you each month where money is slipping away, in plain English.</p>
+        <ul><li>Catch double payments and price creep</li><li>See every subscription you're paying for</li><li>Spot bookkeeping mistakes before tax time</li></ul></div>
+      <div class="card"><h3>Schools, trusts &amp; community groups</h3>
+        <p>A clear monthly report you can take straight to your board or committee, with budgets tracked and donations handled gently.</p>
+        <ul><li>Board-ready spending report</li><li>Budget vs actual, with projections</li><li>Overdue fees tracked, donations treated kindly</li></ul></div>
+      <div class="card"><h3>Accountants &amp; bookkeepers</h3>
+        <p>Review many client files at once. Find GST errors, miscoding and duplicates before you sign off, and get a plain-English report for each client.</p>
+        <ul><li>Batch review across clients</li><li>GST, coding and reconciliation checks</li><li>A PDF review per client</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap sample">
+    <img src="sample-report.png" alt="First page of a sample Mahi Metrics spending report, using made-up figures" loading="lazy">
+    <div>
+      <div class="kicker">Sample report</div>
+      <h2>See exactly what you'd get.</h2>
+      <p class="lead">A short PDF each month: the headline numbers, every item to check with what to do about it, your
+        regular charges, upcoming yearly bills and a 12-month spending chart.</p>
+      <a class="btn ghost" href="sample-report.pdf" target="_blank" rel="noopener">Open the sample report (PDF)</a>
+      <p class="small" style="margin-top:12px;color:var(--grey);font-size:15px">Made-up example data.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="kicker">Pricing</div>
+    <h2>Simple pricing. The first check is free.</h2>
+    <p class="lead">All prices exclude GST. No lock-in contracts: cancel any time.</p>
+    <div class="cards c3" style="margin-top:34px">
+      <div class="card price featured"><span class="badge">Most popular</span>
+        <h3>Small business</h3>
+        <div class="amount">$25<span style="font-size:20px"> /week</span></div>
+        <div class="per">+ GST, billed monthly</div>
+        <ul><li>Connects to your Xero (read-only)</li><li>All 25+ checks, every month</li><li>Reviewed by a person</li>
+          <li>Monthly PDF report</li><li>Overdue invoices and reminder emails</li></ul>
+        <a class="btn primary" href="#contact">Start with a free check</a></div>
+      <div class="card price">
+        <h3>Schools &amp; organisations</h3>
+        <div class="amount">$429<span style="font-size:20px"> /month</span></div>
+        <div class="per">+ GST. Community groups and clubs: ask us about reduced pricing.</div>
+        <ul><li>Everything in Small business</li><li>Board-ready monthly report</li><li>Budget vs actual, with projections</li>
+          <li>Gentle reminders for donations</li><li>A catch-up call each quarter</li></ul>
+        <a class="btn ghost" href="#contact">Talk to us</a></div>
+      <div class="card price">
+        <h3>Accountants &amp; bookkeepers</h3>
+        <div class="amount">$15<span style="font-size:20px"> /client</span></div>
+        <div class="per">per month + GST. No per-user fees.</div>
+        <ul><li>Bookkeeping review across all clients</li><li>GST, coding, duplicate and reconciliation checks</li>
+          <li>Batch review in one go</li><li>A PDF review per client</li></ul>
+        <a class="btn ghost" href="#contact">Book a demo</a></div>
+    </div>
+    <div class="guarantee">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#17756F" stroke-width="2.2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><polyline points="8.5 12 11 14.5 15.5 10"/></svg>
+      <div><b style="color:var(--green)">Our promise:</b> if we don't find more than the cost in your first three months, you don't pay for them.</div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap two">
+    <div>
+      <div class="kicker">Your data</div>
+      <h2>Your books stay yours.</h2>
+      <p>We know you're trusting us with your financial information. Here's how we look after it:</p>
+    </div>
+    <div class="card">
+      <ul>
+        <li><b>Read-only.</b> We can't change, add or delete anything in your Xero.</li>
+        <li><b>Only what we need.</b> Addresses, phone numbers and email addresses are removed automatically.</li>
+        <li><b>Never sold or shared.</b> Your data is only used to prepare your reports.</li>
+        <li><b>Stored securely</b> on encrypted computers, with an encrypted backup.</li>
+        <li><b>You're in control.</b> Disconnect any time, and we delete your data when you leave.</li>
+      </ul>
+      <p style="margin:12px 0 0"><a href="privacy.html">Read our privacy policy</a></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap two">
+    <div>
+      <div class="kicker">About</div>
+      <h2>Kia ora, I'm Brodie.</h2>
+      <p>I'm a finance and accounting student at the University of Waikato, and I started Mahi Metrics in Hamilton
+        because small businesses and organisations lose money in ways nobody has time to spot: a bill paid twice, a price that
+        quietly went up, a subscription nobody uses.</p>
+      <p><i>Mahi</i> means work in te reo Māori. Mahi Metrics does the checking work for you, so you can get on with yours.</p>
+    </div>
+    <div>
+      <div class="kicker">Questions</div>
+      <details><summary>Can Mahi Metrics change anything in my Xero?</summary>
+        <p>No. We only ask for read-only access, so we can't create, edit or delete anything. You can remove our access at any time.</p></details>
+      <details><summary>I don't use Xero. Can you still help?</summary>
+        <p>Yes. We can work from an export from your accounting software, or from your bank statements.</p></details>
+      <details><summary>What if you don't find anything?</summary>
+        <p>Then that's good news, and our promise applies: if we don't find more than the cost in your first three months, you don't pay for them.</p></details>
+      <details><summary>Is this financial advice?</summary>
+        <p>No. We point out possible issues for you to check against your invoices and records. You decide what to act on.
+          For tax or investment decisions, talk to your accountant.</p></details>
+      <details><summary>Can I cancel?</summary>
+        <p>Any time. There's no lock-in contract, and we delete your data when you leave.</p></details>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="padding-top:20px">
+  <div class="wrap">
+    <div class="cta">
+      <h2>Get your free health check</h2>
+      <p>We'll check your last 12 months and show you what we find. It's free, and it takes you about two minutes.</p>
+      <a class="btn primary" href="mailto:mahimetrics@outlook.com?subject=Free%20health%20check&amp;body=Kia%20ora%20Brodie%2C%0A%0AI'd%20like%20a%20free%20health%20check.%0A%0ABusiness%20or%20organisation%20name%3A%0AWe%20use%20(Xero%20%2F%20other)%3A%0ABest%20phone%20number%3A%0A">Email us for a free check</a>
+      <p style="margin:18px 0 0;font-size:16px">mahimetrics@outlook.com</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 Mahi Metrics · Hamilton, New Zealand</div>
+    <div><a href="privacy.html">Privacy</a> · <a href="mailto:mahimetrics@outlook.com">mahimetrics@outlook.com</a> · Works with Xero (read-only)</div>
+  </div>
+</footer>
+</body>
+</html>
